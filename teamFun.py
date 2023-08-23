@@ -5,7 +5,7 @@ import list
 
 
 def safeGuard():
-    r = requests.get("https://api.aircall.io/v1/teams/118724",headers=secret.getHeaderLocal())
+    r = requests.get("URL of Aircall API - team",headers=secret.getHeaderLocal())
     data = r.json()
     if len(data["team"]["users"]) > 5:
         return True
@@ -13,7 +13,7 @@ def safeGuard():
         return False
 
 def teamCheck():
-    response = requests.get("https://api.aircall.io/v1/teams/118724",headers=secret.getHeaderLocal())
+    response = requests.get("URL of Aircall API - team",headers=secret.getHeaderLocal())
     data = response.json()
     if response.status_code == 200:
         for x in data["team"]["users"]:
@@ -34,7 +34,7 @@ def teamCheck():
 
 def teamPost():
     userID = list.getID(os.environ.get("Username")) 
-    apiURL ="https://api.aircall.io/v1/teams/118724/users/"+userID
+    apiURL ="URL of Aircall API - team/users"+userID
 
     response = requests.post(apiURL,headers=secret.getHeaderLocal())
     if response.status_code == 200:
@@ -56,7 +56,7 @@ def teamPost():
 
 def teamDelete():
     userID = list.getID(os.environ.get("Username")) 
-    apiURL ="https://api.aircall.io/v1/teams/118724/users/"+userID
+    apiURL ="URL of Aircall API - team/users"+userID
 
     response = requests.delete(apiURL,headers=secret.getHeaderLocal())
     if response.status_code == 200:

@@ -1,8 +1,7 @@
 import csv
-import os
 
 # mapping of the list
-# windows account name to aircall ID 
+# windows account name to aircall ID
 
 
 # two possibilities to access the mapping list of user to aircall ID.

@@ -1,7 +1,11 @@
 import csv
 import os
 
-#two possibilities to access the mapping list of user to aircall ID.
+# mapping of the list
+# windows account name to aircall ID 
+
+
+# two possibilities to access the mapping list of user to aircall ID.
 # 1. list as variable
 data = [["user1","aircall_ID1"],
         ["user2","aircall_ID2"],

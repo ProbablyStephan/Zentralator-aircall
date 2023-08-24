@@ -1,20 +1,19 @@
 import csv
 import os
 
-data = [["stephan.rott","1054671","DEV"],
-        ["igor.dymler","983875","DEV"],
-        ["thomas.krieninger","1055361","SP"],
-        ["benjamin.sueffert","1055315","SP"],
-        ["nadege.viaud","1055322","TSR"],
-        ["driton.kola","1055360","TSR"],
-        ["ferdinand.herrmann","1055349","TSR"],
-        ["horst.sueffert","1055313","TSR"],
-        ["anja.maerz","1055366","CSR"],
-        ["julia.schwaiger","1055277","CSR"],
-        ["katrin.loeffler","1055277","CSR"],
-        ["marina.weweck","1055331","CSR"],
-        ["markus.croseck","1055334","CSR"],
-        ["christian.herrmann","1055346","CSR"]]
+# mapping of the list
+# windows account name - aircall ID - Department
+
+
+# two possibilities to access the mapping list of user to aircall ID.
+# 1. list as variable
+data = [["user1","aircall_ID1","Department"],
+        ["user2","aircall_ID2","Department"],
+        ["user3","aircall_ID3","Department"]]
+
+# 2. open a .csv on a networkdrive. (possible problems when using over VPN)
+with open(r"Full Qualified Name of the filelocation", newline="") as csvfile:
+    data = list(csv.reader(csvfile,delimiter=","))
 
 
 #Funktionen Liste

@@ -1,19 +1,35 @@
 # mapping of the list
 # windows account name - aircall ID - Department
 
+# Improvement: checking if the network file can be opened. If not we use backup data implemented as variable (only viable if the data set is small) 
+# Ensures functionality of the programm.  
+# If new members get added it still reults in new compilation and distribution.
+data = None
 
-# two possibilities to access the mapping list of user to aircall ID.
-# 1. list as variable
-data = [["user1","aircall_ID1","Department"],
+
+backupData = [["user1","aircall_ID1","Department"],
         ["user2","aircall_ID2","Department"],
         ["user3","aircall_ID3","Department"]]
 
-# 2. open a .csv on a networkdrive. (possible problems when using over VPN)
-with open(r"Full Qualified Name of the filelocation", newline="") as csvfile:
-    data = list(csv.reader(csvfile,delimiter=","))
+
 	
 
 #dataset functions
+def loadFile():
+    try:
+        csvfile = open(r"Full Qualified Name of the filelocation", newline="")
+        return list(csv.reader(csvfile,delimiter=",")) , "Network File Used"
+    except:
+        return backupData, "Backup Data Used"
+
+def inList(name):
+    for x in data:
+        if x[0] == name:
+            return True
+        else:
+            tmp = False
+    return tmp
+
 def getID(name):
     for x in data:
         if x[0] == name:

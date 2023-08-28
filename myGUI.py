@@ -66,13 +66,13 @@ class MainPanel(wx.Panel):
 
     def Init(self):
         self.recognizedUser.AppendText(f'{apiCalls.currentUser} - {dataset.getDep(apiCalls.currentUser)}')
-        if dataset.getDep(apiCalls.currentUser) == "unknown user":
+        self.logger.AppendText(f'{datetime.now().strftime("%H:%M:%S")} - {dataset.loadFile()[1]}\n')
+        if dataset.inList(apiCalls.currentUser) == False:
             self.ButtomCheck.Disable()
             self.ButtomIn.Disable()
             self.ButtomOut.Disable()
             self.ButtomMember.Disable()
             self.logger.AppendText(f'{datetime.now().strftime("%H:%M:%S")} - {apiCalls.currentUser} hat keine Berechtigungen das Programm zu verwenden.')
-
             
 
             
@@ -116,4 +116,5 @@ class MainWindow(wx.Frame):
 
     def InitMain(self):
         apiCalls.currentUser = apiCalls.initUser()
+        dataset.data = dataset.loadFile()[0]
         MainPanel.Init(self.panel)

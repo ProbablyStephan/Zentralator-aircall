@@ -7,23 +7,8 @@ currentUser = ""
 
 def initUser():
     return os.environ.get("Username")
-
-def safeGuard():
-    try:
-        r = requests.get("Aircall API URL - team",headers=secret.getHeaderLocal())
-        if len(r.json()["team"]["users"]) > 5:
-            return True
-        elif len(r.json()["team"]["users"]) <= 5:
-            return False
-        r.raise_for_status()
-    except requests.exceptions.HTTPError as errh:
-        return errh
-    except requests.exceptions.ConnectionError as errc:
-        return errc
-    except requests.exceptions.Timeout as errt:
-        return errt
-    except requests.exceptions.RequestException as err:
-        return err
+    
+#API calls
 
 def teamCheck(name):
     try:
@@ -43,53 +28,6 @@ def teamCheck(name):
         return errt
     except requests.exceptions.RequestException as err:
         return err
-
-
-
-def complexGuard(name):
-    match dataset.getDep(name):
-        case "DEV":
-            return True 
-        case "SP":
-            return True
-        case "CSR":
-            try:
-                r = requests.get("Aircall API URL - team",headers=secret.getHeaderLocal())
-                
-                if sum(x in dataset.listMember("CSR") for x in getZentraleIDs()) >= 3:
-                    return True
-                elif len(r.json()["team"]["users"]) < 3:
-                    return False
-                r.raise_for_status()
-            
-            except requests.exceptions.HTTPError as errh:
-                return errh
-            except requests.exceptions.ConnectionError as errc:
-                return errc
-            except requests.exceptions.Timeout as errt:
-                return errt
-            except requests.exceptions.RequestException as err:
-                return err
-        case "TSR":
-            try:
-                r = requests.get("Aircall API URL - team",headers=secret.getHeaderLocal())
-                
-                if sum(x in dataset.listMember("CSR") for x in getZentraleIDs()) >= 2:
-                    return True
-                elif len(r.json()["team"]["users"]) < 2:
-                    return False
-                r.raise_for_status()
-            
-            except requests.exceptions.HTTPError as errh:
-                return errh
-            except requests.exceptions.ConnectionError as errc:
-                return errc
-            except requests.exceptions.Timeout as errt:
-                return errt
-            except requests.exceptions.RequestException as err:
-                return err
-        case _:
-            return "unknown user"
 
 def addToTeam(name):
     try:
@@ -124,16 +62,6 @@ def removeFromTeam(name):
         return errt
     except requests.exceptions.RequestException as err:
         return err
-
-
-
-def complexeDelete(name):
-    if complexGuard(name) == True:
-        return removeFromTeam(name)
-    elif complexGuard(name) == False:
-        return "!!! Zu wenig Mitarbeiter in Zentrale !!!"
-    else:
-        return f'Guard: {str(complexGuard(name))}'
     
 def listMembers():
     try:
@@ -152,6 +80,7 @@ def listMembers():
         return errt
     except requests.exceptions.RequestException as err:
         return err
+        
 def getZentraleIDs():
     try:
         r = requests.get("Aircall API URL - team",headers=secret.getHeaderLocal())
@@ -169,3 +98,51 @@ def getZentraleIDs():
         return errt
     except requests.exceptions.RequestException as err:
         return err
+
+#Logic
+
+def safeGuard():
+    try:
+        r = requests.get("Aircall API URL - team",headers=secret.getHeaderLocal())
+        if len(r.json()["team"]["users"]) > 5:
+            return True
+        elif len(r.json()["team"]["users"]) <= 5:
+            return False
+        r.raise_for_status()
+    except requests.exceptions.HTTPError as errh:
+        return errh
+    except requests.exceptions.ConnectionError as errc:
+        return errc
+    except requests.exceptions.Timeout as errt:
+        return errt
+    except requests.exceptions.RequestException as err:
+        return err
+
+def complexGuard(name):
+    match dataset.getDep(name):
+        case "DEV":
+            return True 
+        case "SP":
+            return True
+        case "VI":
+            return True
+        case "CSR":                
+            if sum(str(x) in dataset.listMember("CSR") for x in getZentraleIDs()) >= 3:
+                return True
+            else:
+                return False
+        case "TSR":
+            if sum(str(x) in dataset.listMember("TSR") for x in getZentraleIDs()) >= 2:
+                return True
+            else:
+                return False
+        case _:
+            return "unknown user"
+
+def complexeDelete(name):
+    if complexGuard(name) == True:
+        return removeFromTeam(name)
+    elif complexGuard(name) == False:
+        return "!!! Zu wenig Mitarbeiter in Zentrale !!!"
+    else:
+        return f'Guard: {str(complexGuard(name))}'

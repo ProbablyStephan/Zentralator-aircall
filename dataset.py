@@ -45,3 +45,10 @@ def getDep(name):
         else:
             tmp = "unknown user"
     return tmp
+	
+def listMember(dep):
+    tmp = []
+    for x in data:
+        if x[2] == dep:
+            tmp.append(x[1])
+    return tmp

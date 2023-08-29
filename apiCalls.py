@@ -15,7 +15,7 @@ def safeGuard():
             return True
         elif len(r.json()["team"]["users"]) <= 5:
             return False
-        raise r.raise_for_status()
+        r.raise_for_status()
     except requests.exceptions.HTTPError as errh:
         return errh
     except requests.exceptions.ConnectionError as errc:
@@ -60,7 +60,7 @@ def complexGuard(name):
                     return True
                 elif len(r.json()["team"]["users"]) < 3:
                     return False
-                raise r.raise_for_status()
+                r.raise_for_status()
             
             except requests.exceptions.HTTPError as errh:
                 return errh
@@ -78,7 +78,7 @@ def complexGuard(name):
                     return True
                 elif len(r.json()["team"]["users"]) < 2:
                     return False
-                raise r.raise_for_status()
+                r.raise_for_status()
             
             except requests.exceptions.HTTPError as errh:
                 return errh

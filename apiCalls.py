@@ -56,9 +56,9 @@ def complexGuard(name):
             try:
                 r = requests.get("Aircall API URL - team",headers=secret.getHeaderLocal())
                 
-                if sum(x in dataset.listMember("CSR") for x in r.json()["team"]["users"]) > 3:
+                if sum(x in dataset.listMember("CSR") for x in getZentraleIDs()) >= 3:
                     return True
-                elif len(r.json()["team"]["users"]) <= 3:
+                elif len(r.json()["team"]["users"]) < 3:
                     return False
                 raise r.raise_for_status()
             
@@ -74,9 +74,9 @@ def complexGuard(name):
             try:
                 r = requests.get("Aircall API URL - team",headers=secret.getHeaderLocal())
                 
-                if sum(x in dataset.listMember("TSR") for x in r.json()["team"]["users"]) > 2:
+                if sum(x in dataset.listMember("CSR") for x in getZentraleIDs()) >= 2:
                     return True
-                elif len(r.json()["team"]["users"]) <= 2:
+                elif len(r.json()["team"]["users"]) < 2:
                     return False
                 raise r.raise_for_status()
             
@@ -142,6 +142,23 @@ def listMembers():
             tmp = []
             for x in r.json()["team"]["users"]:
                 tmp.append(x["name"])
+            return tmp
+        r.raise_for_status()
+    except requests.exceptions.HTTPError as errh:
+        return errh
+    except requests.exceptions.ConnectionError as errc:
+        return errc
+    except requests.exceptions.Timeout as errt:
+        return errt
+    except requests.exceptions.RequestException as err:
+        return err
+def getZentraleIDs():
+    try:
+        r = requests.get("Aircall API URL - team",headers=secret.getHeaderLocal())
+        if r.status_code == 200:
+            tmp = []
+            for x in r.json()["team"]["users"]:
+                tmp.append(x["id"])
             return tmp
         r.raise_for_status()
     except requests.exceptions.HTTPError as errh:

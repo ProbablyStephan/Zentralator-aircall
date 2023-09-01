@@ -17,8 +17,7 @@ def teamCheck(name):
             for x in r.json()["team"]["users"]:
                 if str(x["id"]) == dataset.getID(name):
                     return f'{name} ist in Zentrale.'
-                else:
-                    return f'{name} ist nicht in Zentrale.'
+            return f'{name} ist nicht in Zentrale.'
         r.raise_for_status()
     except requests.exceptions.HTTPError as errh:
         return errh
